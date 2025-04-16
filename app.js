@@ -10,9 +10,15 @@ var usersRouter = require('./routes/users');
 var ordersRouter = require('./routes/orders');
 
 var app = express();
-const cors = require('cors');
-
-app.use(cors());
+const allowedOrigins = [
+    "https://lafabrique-frontend.vercel.app",
+    "http://localhost:3001",
+  ];
+  
+  app.use(cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
