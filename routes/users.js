@@ -202,4 +202,27 @@ router.post('/update-password', async (req, res) => {
   }
 });
 
+router.post('/save-palette', async (req, res) => {
+  const { token, palette } = req.body;
+  
+  if (!Array.isArray(palette) || palette.length === 0) {
+    return res.json({ result: false, error: 'Palette invalide' });
+  }
+
+  const user = await User.findOne({ token });
+  if (!user) return res.json({ result: false, error: 'Utilisateur introuvable' });
+
+  user.palettes.push(palette);
+  await user.save();
+  res.json({ result: true });
+});
+
+router.post('/get-palettes', async (req, res) => {
+  const user = await User.findOne({ token: req.body.token });
+  if (!user) return res.json({ result: false });
+
+  res.json({ result: true, palettes: user.palettes });
+});
+
+
 module.exports = router;
